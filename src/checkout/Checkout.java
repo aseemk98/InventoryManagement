@@ -1,3 +1,5 @@
+package checkout;
+
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -38,16 +40,20 @@ public class Checkout extends javax.swing.JFrame{
         CgstText = new javax.swing.JTextField();
         SgstText = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Table1 = new javax.swing.JTable();
+        checkoutTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        checkoutMenu = new javax.swing.JMenu();
+        checkoutInv = new javax.swing.JMenuItem();
+        checkoutSales = new javax.swing.JMenuItem();
+        checkoutLogout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("CHECKOUT");
+        setPreferredSize(new java.awt.Dimension(580, 580));
+        setResizable(false);
+        setSize(new java.awt.Dimension(580, 580));
 
         jLabel1.setText("SGST");
 
@@ -61,7 +67,7 @@ public class Checkout extends javax.swing.JFrame{
             }
         });
 
-        Table1.setModel(new javax.swing.table.DefaultTableModel(
+        checkoutTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -69,7 +75,7 @@ public class Checkout extends javax.swing.JFrame{
                 "ProductID", "Name", "Base Price", "Quantity", "Cost"
             }
         ));
-        jScrollPane1.setViewportView(Table1);
+        jScrollPane1.setViewportView(checkoutTable);
 
         jButton1.setText("Add Product");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -85,18 +91,18 @@ public class Checkout extends javax.swing.JFrame{
             }
         });
 
-        jMenu1.setText("Menu");
+        checkoutMenu.setText("Menu");
 
-        jMenuItem1.setText("Inventory");
-        jMenu1.add(jMenuItem1);
+        checkoutInv.setText("Inventory");
+        checkoutMenu.add(checkoutInv);
 
-        jMenuItem2.setText("Sales");
-        jMenu1.add(jMenuItem2);
+        checkoutSales.setText("Sales");
+        checkoutMenu.add(checkoutSales);
 
-        jMenuItem3.setText("Log Out");
-        jMenu1.add(jMenuItem3);
+        checkoutLogout.setText("Log Out");
+        checkoutMenu.add(checkoutLogout);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(checkoutMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -151,17 +157,20 @@ public class Checkout extends javax.swing.JFrame{
     }//GEN-LAST:event_SgstTextActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        // Remove Row:
+        DefaultTableModel model = (DefaultTableModel) checkoutTable.getModel();
+        model.removeRow(checkoutTable.getSelectedRow());
     }//GEN-LAST:event_jButton2ActionPerformed
  
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // Add Row:
         
         JComboBox comboBox = new JComboBox<>();
-        DefaultTableModel model = (DefaultTableModel)Table1.getModel();
-        TableColumn testColumn = Table1.getColumnModel().getColumn(3);
-        for(int i=0;i<101;i++)
+        DefaultTableModel model = (DefaultTableModel)checkoutTable.getModel();
+        TableColumn testColumn = checkoutTable.getColumnModel().getColumn(3);
+        // Qty Selection
+        for(int i=1;i<=100;i++)
         {
             comboBox.addItem(i);
         }
@@ -203,18 +212,18 @@ public class Checkout extends javax.swing.JFrame{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CgstText;
     private javax.swing.JTextField SgstText;
-    private javax.swing.JTable Table1;
     private javax.swing.JTextField TotalCost;
+    private javax.swing.JMenuItem checkoutInv;
+    private javax.swing.JMenuItem checkoutLogout;
+    private javax.swing.JMenu checkoutMenu;
+    private javax.swing.JMenuItem checkoutSales;
+    private javax.swing.JTable checkoutTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 };
