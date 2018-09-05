@@ -209,6 +209,10 @@ public class Checkout extends javax.swing.JFrame{
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // Remove Row:
         DefaultTableModel model = (DefaultTableModel) checkoutTable.getModel();
+        int i = checkoutTable.getSelectedRow();
+        tCost = tCost - ((Integer)model.getValueAt(i,4 )+(Integer)model.getValueAt(i,4 )*0.05);
+        TotalCost.setText(Double.toString(tCost));
+
         model.removeRow(checkoutTable.getSelectedRow());
     }//GEN-LAST:event_jButton2ActionPerformed
  
@@ -225,6 +229,11 @@ public class Checkout extends javax.swing.JFrame{
             JOptionPane.showMessageDialog(null,"Product ID has to be an alphanumeric and cannot be null","Error",JOptionPane.INFORMATION_MESSAGE);
        
         else{
+        //checking if pid is already present
+        
+            
+            
+            
         quantity=(Integer)QuantText.getValue();
         
         //Code for getting product values goes here
@@ -243,6 +252,7 @@ public class Checkout extends javax.swing.JFrame{
         tCost = tCost+((ProCost*0.05) + ProCost);
         TotalCost.setText(Double.toString(tCost));
         }
+        ProIDtext.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ProIDtextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProIDtextActionPerformed
