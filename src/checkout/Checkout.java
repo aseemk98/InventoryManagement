@@ -20,9 +20,12 @@ public class Checkout extends javax.swing.JFrame{
     /**
      * Creates new form Checkout
      */
+    Double tCost;
+    
     
     public Checkout() {
         initComponents();
+        tCost=0.0;
     }
 
     /**
@@ -202,9 +205,10 @@ public class Checkout extends javax.swing.JFrame{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         //
-        int ProCost=0,quantity,BasePr=60;
+        int ProCost=0,quantity,BasePr=100;
         String productID, Name="XYZ";
-       
+        //Double tCost;
+        
         productID=ProIDtext.getText().toString();
         quantity=(Integer)QuantText.getValue();
         
@@ -220,6 +224,10 @@ public class Checkout extends javax.swing.JFrame{
         DefaultTableModel model = (DefaultTableModel)checkoutTable.getModel();
         
         model.addRow(new Object[]{productID,Name,BasePr,quantity,ProCost});
+        
+        tCost = tCost+((ProCost*0.05) + ProCost);
+        TotalCost.setText(Double.toString(tCost));
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ProIDtextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProIDtextActionPerformed
