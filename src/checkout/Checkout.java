@@ -3,6 +3,7 @@ package checkout;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -27,7 +28,17 @@ public class Checkout extends javax.swing.JFrame{
         initComponents();
         tCost=0.0;
     }
-
+    
+    private boolean pidCheck(String pidString){
+        for(int i=0;i<pidString.length();i++){
+            Character test=pidString.charAt(i);
+            if(test<48 || test>57)
+                return false;
+               
+        }
+    
+        return true;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -210,6 +221,10 @@ public class Checkout extends javax.swing.JFrame{
         //Double tCost;
         
         productID=ProIDtext.getText().toString();
+        if(!pidCheck(productID) || productID.isEmpty())
+            JOptionPane.showMessageDialog(null,"Product ID has to be an alphanumeric and cannot be null","Error",JOptionPane.INFORMATION_MESSAGE);
+       
+        else{
         quantity=(Integer)QuantText.getValue();
         
         //Code for getting product values goes here
@@ -227,7 +242,7 @@ public class Checkout extends javax.swing.JFrame{
         
         tCost = tCost+((ProCost*0.05) + ProCost);
         TotalCost.setText(Double.toString(tCost));
-        
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ProIDtextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProIDtextActionPerformed
