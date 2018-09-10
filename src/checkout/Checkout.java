@@ -3,9 +3,9 @@ package checkout;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -202,10 +202,15 @@ public class Checkout extends javax.swing.JFrame{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         //
-        int ProCost=0,quantity,BasePr=60;
-        String productID, Name="XYZ";
+        int ProCost=0,quantity,BasePr=60,productID;
+        String Name="XYZ";
        
-        productID=ProIDtext.getText().toString();
+        productID=Integer.parseInt(ProIDtext.getText());
+        
+        {
+            JOptionPane.showMessageDialog(null, "ProductID cannot be empty.","Information", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
         quantity=(Integer)QuantText.getValue();
         
         //Code for getting product values goes here
