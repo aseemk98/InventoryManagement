@@ -6,6 +6,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -20,11 +21,24 @@ public class Checkout extends javax.swing.JFrame{
     /**
      * Creates new form Checkout
      */
+    Double tCost;
+    
     
     public Checkout() {
         initComponents();
+        tCost=0.0;
     }
-
+    
+    private boolean pidCheck(String pidString){
+        for(int i=0;i<pidString.length();i++){
+            Character test=pidString.charAt(i);
+            if(test<48 || test>57)
+                return false;
+               
+        }
+    
+        return true;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -195,6 +209,10 @@ public class Checkout extends javax.swing.JFrame{
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // Remove Row:
         DefaultTableModel model = (DefaultTableModel) checkoutTable.getModel();
+        int i = checkoutTable.getSelectedRow();
+        tCost = tCost - ((Integer)model.getValueAt(i,4 )+(Integer)model.getValueAt(i,4 )*0.05);
+        TotalCost.setText(Double.toString(tCost));
+
         model.removeRow(checkoutTable.getSelectedRow());
     }//GEN-LAST:event_jButton2ActionPerformed
  
@@ -202,15 +220,20 @@ public class Checkout extends javax.swing.JFrame{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         //
-        int ProCost=0,quantity,BasePr=60,productID;
-        String Name="XYZ";
+        int ProCost=0,quantity,BasePr=100;
+        String productID, Name="XYZ";
+        //Double tCost;
+        
+        productID=ProIDtext.getText().toString();
+        if(!pidCheck(productID) || productID.isEmpty())
+            JOptionPane.showMessageDialog(null,"Product ID has to be an alphanumeric and cannot be null","Error",JOptionPane.INFORMATION_MESSAGE);
        
-        productID=Integer.parseInt(ProIDtext.getText());
+        else{
+        //checking if pid is already present
         
-        {
-            JOptionPane.showMessageDialog(null, "ProductID cannot be empty.","Information", JOptionPane.INFORMATION_MESSAGE);
-        }
-        
+            
+            
+            
         quantity=(Integer)QuantText.getValue();
         
         //Code for getting product values goes here
@@ -225,6 +248,11 @@ public class Checkout extends javax.swing.JFrame{
         DefaultTableModel model = (DefaultTableModel)checkoutTable.getModel();
         
         model.addRow(new Object[]{productID,Name,BasePr,quantity,ProCost});
+        
+        tCost = tCost+((ProCost*0.05) + ProCost);
+        TotalCost.setText(Double.toString(tCost));
+        }
+        ProIDtext.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ProIDtextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProIDtextActionPerformed
