@@ -210,9 +210,12 @@ public class Checkout extends javax.swing.JFrame{
         // Remove Row:
         DefaultTableModel model = (DefaultTableModel) checkoutTable.getModel();
         int i = checkoutTable.getSelectedRow();
-        tCost = tCost - ((Integer)model.getValueAt(i,4 )+(Integer)model.getValueAt(i,4 )*0.05);
-        TotalCost.setText(Double.toString(tCost));
-
+        tCost = tCost - ((Integer)model.getValueAt(i,4 ));
+        double tax=0.025*tCost;
+        SgstLabel.setText(Double.toString(tax));    
+        CgstLabel.setText(Double.toString(tax));
+        double fCost = tCost + 2*tax;
+        TotalCost.setText(Double.toString(fCost));
         model.removeRow(checkoutTable.getSelectedRow());
     }//GEN-LAST:event_jButton2ActionPerformed
  
@@ -249,8 +252,12 @@ public class Checkout extends javax.swing.JFrame{
         
         model.addRow(new Object[]{productID,Name,BasePr,quantity,ProCost});
         
-        tCost = tCost+((ProCost*0.05) + ProCost);
-        TotalCost.setText(Double.toString(tCost));
+        tCost = tCost+ProCost;
+        double tax=0.025*tCost;
+        SgstLabel.setText(Double.toString(tax));    
+        CgstLabel.setText(Double.toString(tax));
+        double fCost = tCost + 2*tax;
+        TotalCost.setText(Double.toString(fCost));
         }
         ProIDtext.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
