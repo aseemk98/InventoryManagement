@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package manager;
+import java.awt.Toolkit;
+import javax.swing.JFrame;
 
 /**
  *
@@ -15,7 +17,13 @@ public class managerPage extends javax.swing.JFrame {
      * Creates new form managerPage
      */
     public managerPage() {
+        this.setAlwaysOnTop(true);  //sets always on top
+        this.setResizable(false);   //not resizable
         initComponents();
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        int xsize = (int) tk.getScreenSize().getWidth();
+        int ysize = (int) tk.getScreenSize().getHeight();
+        this.setSize(xsize, ysize);
     }
 
     /**
