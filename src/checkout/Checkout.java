@@ -1,11 +1,16 @@
 package checkout;
 
 
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import javax.swing.DefaultCellEditor;
+import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.JFrame;
+import javax.swing.SpringLayout;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,19 +19,26 @@ import javax.swing.table.TableColumn;
  */
 
 /**
- *
- * @author awasa
+ * @author [-_-]
  */
 public class Checkout extends javax.swing.JFrame{
     /**
      * Creates new form Checkout
      */
     Double tCost;
-    
+    int ProCost,BasePr;
     
     public Checkout() {
+        this.setAlwaysOnTop(true);  //sets always on top
+        this.setResizable(false);   //not resizable
         initComponents();
+//        Toolkit tk = Toolkit.getDefaultToolkit();
+//        int xsize = (int) tk.getScreenSize().getWidth();
+//        int ysize = (int) tk.getScreenSize().getHeight();
+//        this.setSize(xsize, ysize);
         tCost=0.0;
+        ProCost = 0;
+        BasePr = 100;
     }
     
     private boolean pidCheck(String pidString){
@@ -62,6 +74,7 @@ public class Checkout extends javax.swing.JFrame{
         CgstLabel = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         QuantText = new javax.swing.JSpinner();
+        jButton3 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         checkoutMenu = new javax.swing.JMenu();
         checkoutInv = new javax.swing.JMenuItem();
@@ -71,7 +84,6 @@ public class Checkout extends javax.swing.JFrame{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CHECKOUT");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setPreferredSize(new java.awt.Dimension(700, 700));
         setResizable(false);
         setSize(new java.awt.Dimension(700, 700));
 
@@ -115,7 +127,14 @@ public class Checkout extends javax.swing.JFrame{
 
         jLabel5.setText("Quantity");
 
-        QuantText.setModel(new javax.swing.SpinnerNumberModel(1, null, null, 1));
+        QuantText.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+
+        jButton3.setText("Apply Changes");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         checkoutMenu.setText("Menu");
 
@@ -136,39 +155,36 @@ public class Checkout extends javax.swing.JFrame{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(418, 418, 418)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TotalCost, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                            .addComponent(SgstLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(CgstLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(176, 176, 176)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(254, 254, 254)
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(QuantText, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(209, 209, 209)
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(ProIDtext, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(TotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SgstLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CgstLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(QuantText, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(ProIDtext, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,7 +200,8 @@ public class Checkout extends javax.swing.JFrame{
                 .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -223,48 +240,110 @@ public class Checkout extends javax.swing.JFrame{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         //
-        int ProCost=0,quantity,BasePr=100;
+        int quantity;
+        Boolean flag=false;
+        int row=0,qty=0;
         String productID, Name="XYZ";
         //Double tCost;
         
         productID=ProIDtext.getText().toString();
         if(!pidCheck(productID) || productID.isEmpty())
-            JOptionPane.showMessageDialog(null,"Product ID has to be an alphanumeric and cannot be null","Error",JOptionPane.INFORMATION_MESSAGE);
-       
+            JOptionPane.showMessageDialog(this,"Product ID has to be an alphanumeric and cannot be null","Error",JOptionPane.INFORMATION_MESSAGE);
         else{
-        //checking if pid is already present
+                //checking if pid is already present
+           DefaultTableModel m = (DefaultTableModel) checkoutTable.getModel();
+           for(int i=0;i<checkoutTable.getRowCount();i++)
+           {
+               if(m.getValueAt(i,0).equals(productID))
+               {
+                   flag = true;
+                   row = i;
+               }
+           }
+            if(flag)
+            {
+                //If ProductID exists increase qty                
+                quantity=(Integer)QuantText.getValue();
+                qty = (Integer)m.getValueAt(row, 3);
+                qty += quantity;
+                m.setValueAt(qty, row, 3);
+                ProCost=BasePr*qty;
+                m.setValueAt(ProCost, row, 4);
+                tCost = (double)ProCost;
+                double tax=0.025*tCost;
+                SgstLabel.setText(Double.toString(tax));    
+                CgstLabel.setText(Double.toString(tax));
+                double fCost = tCost + 2*tax;
+                TotalCost.setText(Double.toString(fCost));
+                QuantText.setValue(1);                
+            }
+            else{
+                quantity=(Integer)QuantText.getValue();
         
-            
-            
-            
-        quantity=(Integer)QuantText.getValue();
+                //Code for getting product values goes here
         
-        //Code for getting product values goes here
+                ProCost=BasePr*quantity;
+                //Add Row with the above obtained product details:
         
-        ProCost=BasePr*quantity;
+                DefaultTableModel model = (DefaultTableModel)checkoutTable.getModel();
         
+                model.addRow(new Object[]{productID,Name,BasePr,quantity,ProCost});
         
-        
-        
-        //Add Row witht the above obtained product details:
-        
-        DefaultTableModel model = (DefaultTableModel)checkoutTable.getModel();
-        
-        model.addRow(new Object[]{productID,Name,BasePr,quantity,ProCost});
-        
+<<<<<<< HEAD
         tCost = tCost+ProCost;
         double tax=0.025*tCost;
         SgstLabel.setText(Double.toString(tax));    
         CgstLabel.setText(Double.toString(tax));
         double fCost = tCost + 2*tax;
         TotalCost.setText(Double.toString(fCost));
+=======
+                tCost = tCost+ProCost;
+                double tax=0.025*tCost;
+                SgstLabel.setText(Double.toString(tax));    
+                CgstLabel.setText(Double.toString(tax));
+                double fCost = tCost + 2*tax;
+                TotalCost.setText(Double.toString(fCost));
+                QuantText.setValue(1);
+>>>>>>> baea9c2fab422b31210864ca61c8b2a8ce7076b3
         }
+    }
         ProIDtext.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ProIDtextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProIDtextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ProIDtextActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel m = (DefaultTableModel) checkoutTable.getModel();
+        int qty;
+        for(int i=0;i<checkoutTable.getRowCount();i++)
+        {
+            if(i==checkoutTable.getSelectedRow())
+                qty = Integer.parseInt((String)m.getValueAt(i, 3));
+            else
+                qty = (Integer)m.getValueAt(i, 3);
+            if(qty<1)
+                qty = 1;
+            System.out.println(qty);
+            m.setValueAt(qty, i, 3);
+            ProCost=BasePr*qty;
+            System.out.println(ProCost);
+            m.setValueAt(ProCost, i, 4);
+        }
+        tCost = 0.0;
+        for(int i=0;i<checkoutTable.getRowCount();i++)
+        {
+            tCost += (Integer)m.getValueAt(i, 4);
+            double tax=0.025*tCost;
+            SgstLabel.setText(Double.toString(tax));    
+            CgstLabel.setText(Double.toString(tax));
+            double fCost = tCost + 2*tax;
+            TotalCost.setText(Double.toString(fCost));
+            QuantText.setValue(1);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -310,6 +389,7 @@ public class Checkout extends javax.swing.JFrame{
     private javax.swing.JTable checkoutTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
