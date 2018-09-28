@@ -6,6 +6,7 @@
 package manager;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
+import loginPage.loginPage;
 
 /**
  *
@@ -104,7 +105,10 @@ public class managerPage extends javax.swing.JFrame {
     }//GEN-LAST:event_managerSalesActionPerformed
 
     private void managerLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerLogoutActionPerformed
-        // TODO add your handling code here:
+        //Logout:
+        JFrame frame = new loginPage();
+        frame.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_managerLogoutActionPerformed
 
     /**

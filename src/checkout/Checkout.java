@@ -3,6 +3,9 @@ package checkout;
 
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.DefaultCellEditor;
 import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
@@ -11,11 +14,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.JFrame;
 import javax.swing.SpringLayout;
+import loginPage.SendBillTLS;
+import loginPage.loginPage;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+    anurag lavduchand hai
  */
 
 /**
@@ -32,10 +38,10 @@ public class Checkout extends javax.swing.JFrame{
         this.setAlwaysOnTop(true);  //sets always on top
         this.setResizable(false);   //not resizable
         initComponents();
-//        Toolkit tk = Toolkit.getDefaultToolkit();
-//        int xsize = (int) tk.getScreenSize().getWidth();
-//        int ysize = (int) tk.getScreenSize().getHeight();
-//        this.setSize(xsize, ysize);
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        int xsize = (int) tk.getScreenSize().getWidth();
+        int ysize = (int) tk.getScreenSize().getHeight();
+        this.setSize(xsize, ysize);
         tCost=0.0;
         ProCost = 0;
         BasePr = 100;
@@ -75,6 +81,10 @@ public class Checkout extends javax.swing.JFrame{
         jLabel5 = new javax.swing.JLabel();
         QuantText = new javax.swing.JSpinner();
         jButton3 = new javax.swing.JButton();
+        Discount = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         checkoutMenu = new javax.swing.JMenu();
         checkoutInv = new javax.swing.JMenuItem();
@@ -89,7 +99,7 @@ public class Checkout extends javax.swing.JFrame{
 
         jLabel1.setText("SGST @ 2.5%");
 
-        jLabel2.setText("CGST @ 2.5$");
+        jLabel2.setText("CGST @ 2.5%");
 
         jLabel3.setText("Total Price");
 
@@ -136,6 +146,28 @@ public class Checkout extends javax.swing.JFrame{
             }
         });
 
+        Discount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DiscountActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Apply ");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("CODE :");
+
+        jButton5.setText("Print Bill");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         checkoutMenu.setText("Menu");
 
         checkoutInv.setText("Inventory");
@@ -145,6 +177,11 @@ public class Checkout extends javax.swing.JFrame{
         checkoutMenu.add(checkoutSales);
 
         checkoutLogout.setText("Log Out");
+        checkoutLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkoutLogoutActionPerformed(evt);
+            }
+        });
         checkoutMenu.add(checkoutLogout);
 
         jMenuBar1.add(checkoutMenu);
@@ -182,9 +219,25 @@ public class Checkout extends javax.swing.JFrame{
                         .addComponent(jLabel4)
                         .addGap(18, 18, 18)
                         .addComponent(ProIDtext, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(Discount, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(21, 21, 21))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton4)
+                        .addGap(29, 29, 29))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,19 +258,26 @@ public class Checkout extends javax.swing.JFrame{
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(SgstLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(SgstLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(Discount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6))))
                     .addComponent(CgstLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(TotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
+                    .addComponent(TotalCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
+                .addGap(23, 23, 23))
         );
 
         pack();
@@ -239,16 +299,13 @@ public class Checkout extends javax.swing.JFrame{
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        //
         int quantity;
         Boolean flag=false;
         int row=0,qty=0;
         String productID, Name="XYZ";
-        //Double tCost;
-        
-        productID=ProIDtext.getText().toString();
+        productID=ProIDtext.getText();
         if(!pidCheck(productID) || productID.isEmpty())
-            JOptionPane.showMessageDialog(this,"Product ID has to be an alphanumeric and cannot be null","Error",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Product ID has to be an numeric and cannot be null","Error",JOptionPane.INFORMATION_MESSAGE);
         else{
                 //checking if pid is already present
            DefaultTableModel m = (DefaultTableModel) checkoutTable.getModel();
@@ -278,25 +335,14 @@ public class Checkout extends javax.swing.JFrame{
                 QuantText.setValue(1);                
             }
             else{
-                quantity=(Integer)QuantText.getValue();
-        
                 //Code for getting product values goes here
-        
+                quantity=(Integer)QuantText.getValue();
+               
                 ProCost=BasePr*quantity;
                 //Add Row with the above obtained product details:
         
                 DefaultTableModel model = (DefaultTableModel)checkoutTable.getModel();
-        
                 model.addRow(new Object[]{productID,Name,BasePr,quantity,ProCost});
-        
-<<<<<<< HEAD
-        tCost = tCost+ProCost;
-        double tax=0.025*tCost;
-        SgstLabel.setText(Double.toString(tax));    
-        CgstLabel.setText(Double.toString(tax));
-        double fCost = tCost + 2*tax;
-        TotalCost.setText(Double.toString(fCost));
-=======
                 tCost = tCost+ProCost;
                 double tax=0.025*tCost;
                 SgstLabel.setText(Double.toString(tax));    
@@ -304,7 +350,6 @@ public class Checkout extends javax.swing.JFrame{
                 double fCost = tCost + 2*tax;
                 TotalCost.setText(Double.toString(fCost));
                 QuantText.setValue(1);
->>>>>>> baea9c2fab422b31210864ca61c8b2a8ce7076b3
         }
     }
         ProIDtext.setText("");
@@ -326,24 +371,91 @@ public class Checkout extends javax.swing.JFrame{
                 qty = (Integer)m.getValueAt(i, 3);
             if(qty<1)
                 qty = 1;
-            System.out.println(qty);
             m.setValueAt(qty, i, 3);
             ProCost=BasePr*qty;
-            System.out.println(ProCost);
             m.setValueAt(ProCost, i, 4);
         }
         tCost = 0.0;
         for(int i=0;i<checkoutTable.getRowCount();i++)
         {
             tCost += (Integer)m.getValueAt(i, 4);
+        }
+        double tax=0.025*tCost;
+        SgstLabel.setText(Double.toString(tax));    
+        CgstLabel.setText(Double.toString(tax));
+        double fCost = tCost + 2*tax;
+        TotalCost.setText(Double.toString(fCost));
+        QuantText.setValue(1);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void DiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DiscountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DiscountActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // Discount:
+        DefaultTableModel m = (DefaultTableModel) checkoutTable.getModel();
+        double discount = 0.2;
+        String code;
+        code = Discount.getText().toLowerCase();
+        if(code.equals("bhikari"))
+        {
+            tCost = 0.0;
+            for(int i=0;i<checkoutTable.getRowCount();i++)
+            {
+                tCost += (Integer)m.getValueAt(i, 4);
+            }
+            tCost -= tCost*discount;
             double tax=0.025*tCost;
             SgstLabel.setText(Double.toString(tax));    
             CgstLabel.setText(Double.toString(tax));
             double fCost = tCost + 2*tax;
             TotalCost.setText(Double.toString(fCost));
-            QuantText.setValue(1);
+            jButton4.setEnabled(false);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+        else
+        {
+            JOptionPane.showMessageDialog(this,"Invalid Coupon","Error",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void checkoutLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkoutLogoutActionPerformed
+        //Logout:
+        JFrame frame = new loginPage();
+        frame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_checkoutLogoutActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        //Print Bill:
+        try {
+
+            String pathToExportTo="d:/SDL/InventoryManagement/src/checkout/bill.csv";
+            DefaultTableModel model = (DefaultTableModel) checkoutTable.getModel();
+            FileWriter csv = new FileWriter(new File(pathToExportTo));
+
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                csv.write(model.getColumnName(i) + ",");
+            }
+            csv.write("\n");
+            for (int i = 0; i < model.getRowCount(); i++) {
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    csv.write(model.getValueAt(i, j).toString() + ",");
+                }
+                csv.write("\n");
+            }
+            csv.write("\n\nSgst"+","+SgstLabel.getText()+"\n");
+            csv.write("Cgst"+","+CgstLabel.getText()+"\n");
+            csv.write("CODE"+","+Discount.getText()+"\n");
+            csv.write("Total"+","+TotalCost.getText()+"\n");
+            csv.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String id = JOptionPane.showInputDialog(this,"Enter Email ID:");
+        SendBillTLS object=new SendBillTLS(id);
+        object.Execute();
+    }//GEN-LAST:event_jButton5ActionPerformed
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -378,6 +490,7 @@ public class Checkout extends javax.swing.JFrame{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel CgstLabel;
+    private javax.swing.JTextField Discount;
     private javax.swing.JTextField ProIDtext;
     private javax.swing.JSpinner QuantText;
     private javax.swing.JLabel SgstLabel;
@@ -390,11 +503,14 @@ public class Checkout extends javax.swing.JFrame{
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

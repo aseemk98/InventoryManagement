@@ -240,14 +240,9 @@ public class ForgotPassword extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-<<<<<<< HEAD
-                .addContainerGap()
-                .addComponent(MainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 438, Short.MAX_VALUE))
-=======
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(MainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 407, Short.MAX_VALUE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
->>>>>>> baea9c2fab422b31210864ca61c8b2a8ce7076b3
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,7 +272,7 @@ public class ForgotPassword extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         otp=OTP();
-        String email=EmailText.getText().toString();
+        String email=EmailText.getText();
         
         SendMailTLS object=new SendMailTLS(email, otp);
         
@@ -287,8 +282,6 @@ public class ForgotPassword extends javax.swing.JFrame {
         
         ChildPanel.setVisible(true);
         
-        
-        
     }//GEN-LAST:event_SendActionPerformed
 
     private void OTPTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OTPTextActionPerformed
@@ -297,8 +290,8 @@ public class ForgotPassword extends javax.swing.JFrame {
 
     private void VerifyOtpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerifyOtpActionPerformed
         // TODO add your handling code here:
-        System.err.println(OTPText.getText().toString());
-        if(OTPText.getText().toString().equals(otp))
+        System.err.println(OTPText.getText());
+        if(OTPText.getText().equals(otp))
         {
             ChildChild.setVisible(true);
         }
@@ -315,8 +308,8 @@ public class ForgotPassword extends javax.swing.JFrame {
     private void ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetActionPerformed
         // TODO add your handling code here:
         
-        String password=NewPassText.getText().toString();
-        if(!password.equals(ConfirmNewPass.getText().toString()))
+        String password=NewPassText.getText();
+        if(!password.equals(ConfirmNewPass.getText()))
         {
             JOptionPane.showMessageDialog(null, "The entered passwords do not match..","Information", JOptionPane.INFORMATION_MESSAGE);
         }
