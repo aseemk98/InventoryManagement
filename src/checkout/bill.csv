@@ -1,0 +1,8 @@
+ProductID,Name,Base Price,Quantity,Cost,
+205,Facewash,105.0,10,1050.0,
+
+
+Sgst,26.25
+Cgst,26.25
+CODE,
+Total,1102.5

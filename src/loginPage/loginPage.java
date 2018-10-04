@@ -33,10 +33,8 @@ public class loginPage extends javax.swing.JFrame {
         int xsize = (int) tk.getScreenSize().getWidth();
         int ysize = (int) tk.getScreenSize().getHeight();
         this.setSize(xsize, ysize);
-       
     }
     
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -186,7 +184,6 @@ public class loginPage extends javax.swing.JFrame {
             }
             ++rowCount;
          }
-            //auth failed:
         }
         catch(SQLException se)
         {

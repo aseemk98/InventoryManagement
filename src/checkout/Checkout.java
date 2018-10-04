@@ -1,21 +1,20 @@
 package checkout;
 
 
-import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import javax.swing.DefaultCellEditor;
-import javax.swing.GroupLayout;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.JFrame;
-import javax.swing.SpringLayout;
 import loginPage.SendBillTLS;
 import loginPage.loginPage;
+import Index.index;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -31,9 +30,11 @@ public class Checkout extends javax.swing.JFrame{
     /**
      * Creates new form Checkout
      */
-    Double tCost;
-    int ProCost,BasePr;
-    
+    Double tCost,ProCost,BasePr;
+    int prodID;//from db
+    String productID;//from ui
+    String prodName;
+    index ind = new index();    
     public Checkout() {
         this.setAlwaysOnTop(true);  //sets always on top
         this.setResizable(false);   //not resizable
@@ -43,8 +44,8 @@ public class Checkout extends javax.swing.JFrame{
         int ysize = (int) tk.getScreenSize().getHeight();
         this.setSize(xsize, ysize);
         tCost=0.0;
-        ProCost = 0;
-        BasePr = 100;
+        ProCost = 0.0;
+        BasePr = 0.0;
     }
     
     private boolean pidCheck(String pidString){
@@ -102,6 +103,12 @@ public class Checkout extends javax.swing.JFrame{
         jLabel2.setText("CGST @ 2.5%");
 
         jLabel3.setText("Total Price");
+
+        TotalCost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TotalCostActionPerformed(evt);
+            }
+        });
 
         checkoutTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -298,11 +305,10 @@ public class Checkout extends javax.swing.JFrame{
  
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        
         int quantity;
         Boolean flag=false;
         int row=0,qty=0;
-        String productID, Name="XYZ";
         productID=ProIDtext.getText();
         if(!pidCheck(productID) || productID.isEmpty())
             JOptionPane.showMessageDialog(this,"Product ID has to be an numeric and cannot be null","Error",JOptionPane.INFORMATION_MESSAGE);
@@ -319,36 +325,101 @@ public class Checkout extends javax.swing.JFrame{
            }
             if(flag)
             {
-                //If ProductID exists increase qty                
+                //If ProductID exists increase qty
+                Boolean var = false;
                 quantity=(Integer)QuantText.getValue();
                 qty = (Integer)m.getValueAt(row, 3);
                 qty += quantity;
-                m.setValueAt(qty, row, 3);
-                ProCost=BasePr*qty;
-                m.setValueAt(ProCost, row, 4);
-                tCost = (double)ProCost;
-                double tax=0.025*tCost;
-                SgstLabel.setText(Double.toString(tax));    
-                CgstLabel.setText(Double.toString(tax));
-                double fCost = tCost + 2*tax;
-                TotalCost.setText(Double.toString(fCost));
-                QuantText.setValue(1);                
+                try{
+                    Statement stmt = ind.getconn().createStatement();
+                    String selectstmt = "select * from inventory";
+                    ResultSet rset = stmt.executeQuery(selectstmt);
+                    int rowCount = 0;
+                    int dbQty;
+                    for(int i=0;i<m.getRowCount();i++)
+                    {
+                        while(rset.next()) {   
+                            prodID = rset.getInt(1);
+                            if(prodID==Integer.parseInt((String)m.getValueAt(i,0)))
+                            {
+                                dbQty = rset.getInt(4);
+                                if(dbQty>qty)
+                                {
+                                    var = true;
+                                }
+                            }
+                            ++rowCount;
+                        }
+                    }
+                }
+                catch(SQLException se)
+                {
+                   System.out.println(se);
+                }
+                if(var)
+                {
+                    //qty<dbqty
+                    m.setValueAt(qty, row, 3);
+                    ProCost=BasePr*qty;
+                    m.setValueAt(ProCost, row, 4);
+                    tCost = (double)ProCost;
+                    double tax=0.025*tCost;
+                    SgstLabel.setText(Double.toString(tax));    
+                    CgstLabel.setText(Double.toString(tax));
+                    double fCost = tCost + 2*tax;
+                    TotalCost.setText(Double.toString(fCost));
+                }
+                else
+                {
+                    //error
+                    JOptionPane.showMessageDialog(this,"Too many items","Error",JOptionPane.INFORMATION_MESSAGE);
+                }      
+                QuantText.setValue(1); 
             }
             else{
                 //Code for getting product values goes here
+                int dbQty=0,temp=0;
+                try{
+                    Statement stmt = ind.getconn().createStatement();
+                    String selectstmt = "select * from inventory";
+                    ResultSet rset = stmt.executeQuery(selectstmt);
+                    int rowCount = 0;    
+                    while(rset.next()) {   
+                        prodID = rset.getInt(1);
+                        if(prodID==Integer.parseInt((String)productID))
+                        {
+                            prodName = rset.getString(2);
+                            BasePr = rset.getDouble(5);
+                            dbQty = rset.getInt(4);
+                            break;
+                        }
+                        ++rowCount;
+                    }
+                }
+                catch(SQLException se)
+                {
+                   System.out.println(se);
+                }
                 quantity=(Integer)QuantText.getValue();
-               
-                ProCost=BasePr*quantity;
-                //Add Row with the above obtained product details:
-        
-                DefaultTableModel model = (DefaultTableModel)checkoutTable.getModel();
-                model.addRow(new Object[]{productID,Name,BasePr,quantity,ProCost});
-                tCost = tCost+ProCost;
-                double tax=0.025*tCost;
-                SgstLabel.setText(Double.toString(tax));    
-                CgstLabel.setText(Double.toString(tax));
-                double fCost = tCost + 2*tax;
-                TotalCost.setText(Double.toString(fCost));
+                if(dbQty>quantity)
+                {
+                    ProCost=BasePr*quantity;
+                    //Add Row with the above obtained product details:
+
+                    DefaultTableModel model = (DefaultTableModel)checkoutTable.getModel();
+                    model.addRow(new Object[]{productID,prodName,BasePr,quantity,ProCost});
+                    tCost = tCost+ProCost;
+                    double tax=0.025*tCost;
+                    SgstLabel.setText(Double.toString(tax));    
+                    CgstLabel.setText(Double.toString(tax));
+                    double fCost = tCost + 2*tax;
+                    TotalCost.setText(Double.toString(fCost));  
+                }
+                else
+                {
+                    //error
+                    JOptionPane.showMessageDialog(this,"Too many items","Error",JOptionPane.INFORMATION_MESSAGE);
+                }  
                 QuantText.setValue(1);
         }
     }
@@ -402,8 +473,8 @@ public class Checkout extends javax.swing.JFrame{
         {
             tCost = 0.0;
             for(int i=0;i<checkoutTable.getRowCount();i++)
-            {
-                tCost += (Integer)m.getValueAt(i, 4);
+            {     
+                tCost += (Double)m.getValueAt(i, 4);
             }
             tCost -= tCost*discount;
             double tax=0.025*tCost;
@@ -427,9 +498,38 @@ public class Checkout extends javax.swing.JFrame{
     }//GEN-LAST:event_checkoutLogoutActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        //Change database values:
+        try{
+            DefaultTableModel m = (DefaultTableModel) checkoutTable.getModel();
+            Statement stmt = ind.getconn().createStatement();
+            String selectstmt = "select * from inventory",execstmt = "update inventory set quantity = ? where prodID = ?";
+            ResultSet rset = stmt.executeQuery(selectstmt);
+            PreparedStatement preparedStmt = ind.getconn().prepareStatement(execstmt);
+            int rowCount = 0;
+            int dbQty,uiQty,newQty;
+            for(int i=0;i<m.getRowCount();i++)
+            {
+                while(rset.next()) {   
+                    prodID = rset.getInt(1);
+                    if(prodID==Integer.parseInt((String)m.getValueAt(i,0)))
+                    {
+                        dbQty = rset.getInt(4);
+                        uiQty = (Integer)m.getValueAt(i, 3);
+                        newQty = dbQty - uiQty;
+                        preparedStmt.setInt(1, newQty);
+                        preparedStmt.setInt(2, prodID);
+                        preparedStmt.executeUpdate();
+                    }
+                    ++rowCount;
+                }
+            }
+        }
+        catch(SQLException se)
+        {
+           System.out.println(se);
+        }
         //Print Bill:
         try {
-
             String pathToExportTo="d:/SDL/InventoryManagement/src/checkout/bill.csv";
             DefaultTableModel model = (DefaultTableModel) checkoutTable.getModel();
             FileWriter csv = new FileWriter(new File(pathToExportTo));
@@ -449,13 +549,24 @@ public class Checkout extends javax.swing.JFrame{
             csv.write("CODE"+","+Discount.getText()+"\n");
             csv.write("Total"+","+TotalCost.getText()+"\n");
             csv.close();
-        } catch (IOException e) {
+            model.setRowCount(0);
+            SgstLabel.setText("");
+            CgstLabel.setText("");
+            TotalCost.setText("");
+            Discount.setText("");
+            jButton4.setEnabled(true);
+       } catch (IOException e) {
             e.printStackTrace();
         }
         String id = JOptionPane.showInputDialog(this,"Enter Email ID:");
         SendBillTLS object=new SendBillTLS(id);
         object.Execute();
+        
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void TotalCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalCostActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TotalCostActionPerformed
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
