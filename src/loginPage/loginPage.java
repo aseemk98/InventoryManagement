@@ -4,11 +4,16 @@
  * and open the template in the editor.
  */
 package loginPage;
+import java.sql.*;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 import ForgotPassword.ForgotPassword;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import Index.index;
+import checkout.Checkout;
+import manager.managerPage;
 
 /**
  *
@@ -19,6 +24,7 @@ public class loginPage extends javax.swing.JFrame {
     /**
      * Creates new form loginPage
      */
+    index ind = new index();
     public loginPage() {
         this.setAlwaysOnTop(true);  //sets always on top
         this.setResizable(false);   //not resizable
@@ -27,6 +33,7 @@ public class loginPage extends javax.swing.JFrame {
         int xsize = (int) tk.getScreenSize().getWidth();
         int ysize = (int) tk.getScreenSize().getHeight();
         this.setSize(xsize, ysize);
+       
     }
     
 
@@ -86,7 +93,6 @@ public class loginPage extends javax.swing.JFrame {
         });
 
         jButton1.setText("Forgot Password");
-        jButton1.setBorder(null);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -139,17 +145,57 @@ public class loginPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void usernameInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameInActionPerformed
-        // Input Username:
-        
+        //Username Field:        
     }//GEN-LAST:event_usernameInActionPerformed
 
     private void passwordInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordInActionPerformed
-        // Input Password:
+        //Password Field:
     }//GEN-LAST:event_passwordInActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         // Login Button:
-        
+        String usr = usernameIn.getText();
+        String pswd = passwordIn.getText();
+        Boolean flag = false;
+        try{
+            Statement stmt = ind.getconn().createStatement();
+            String selectstmt = "select empno,password from logindetails";
+            ResultSet rset = stmt.executeQuery(selectstmt);
+            int rowCount = 0;    
+            while(rset.next()) {   
+            String empno = rset.getString(1);
+            String pass = rset.getString(2);
+            if(usr.equals(empno) && pswd.equals(pass))
+            {
+                if(usr.endsWith("Mng"))
+                {
+                    //forward to manager page
+                    JFrame frame = new managerPage();
+                    frame.setVisible(true);
+                    this.dispose();
+                    flag = true;
+                }
+                else
+                {
+                    //forward to emp page
+                    JFrame frame = new Checkout();
+                    frame.setVisible(true);
+                    this.dispose();
+                    flag = true;
+                }
+            }
+            ++rowCount;
+         }
+            //auth failed:
+        }
+        catch(SQLException se)
+        {
+           System.out.println(se);
+        }
+        if(!flag)
+        {
+            JOptionPane.showMessageDialog(this,"Invalid Credentials","Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
