@@ -1,5 +1,6 @@
 package ForgotPassword;
 
+import Index.SimpleMD5;
 import Index.index;
 import java.security.SecureRandom;
 import javax.swing.JOptionPane;
@@ -17,6 +18,7 @@ public class ForgotPassword extends javax.swing.JFrame {
     /**
      * Creates new form ForgotPassword
      */
+    SimpleMD5 enc = new SimpleMD5();
     index ind = new index(); 
     public ForgotPassword() {
         this.setAlwaysOnTop(true);  //sets always on top
@@ -326,7 +328,7 @@ public class ForgotPassword extends javax.swing.JFrame {
                     if(EmailText.getText().equals(empMail))
                     {
                         System.out.println(EmailText.getText()+"\n"+empMail+"\n"+newPswd);
-                        preparedStmt.setString(1, newPswd);
+                        preparedStmt.setString(1, enc.encrypt(newPswd));
                         preparedStmt.setString(2, empMail);
                         preparedStmt.executeUpdate();
                         break;
