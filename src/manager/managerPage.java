@@ -40,12 +40,12 @@ public class managerPage extends javax.swing.JFrame {
         managerMenu = new javax.swing.JMenu();
         managerOrders = new javax.swing.JMenuItem();
         managerEmp = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         managerSales = new javax.swing.JMenuItem();
         managerLogout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("WELCOME!!!");
-        setPreferredSize(new java.awt.Dimension(580, 580));
         setResizable(false);
         setSize(new java.awt.Dimension(580, 580));
 
@@ -61,6 +61,14 @@ public class managerPage extends javax.swing.JFrame {
 
         managerEmp.setText("Employees");
         managerMenu.add(managerEmp);
+
+        jMenuItem1.setText("Inventory");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        managerMenu.add(jMenuItem1);
 
         managerSales.setText("Sales");
         managerSales.addActionListener(new java.awt.event.ActionListener() {
@@ -111,6 +119,10 @@ public class managerPage extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_managerLogoutActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -148,6 +160,7 @@ public class managerPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem managerEmp;
     private javax.swing.JMenuItem managerLogout;
     private javax.swing.JMenu managerMenu;

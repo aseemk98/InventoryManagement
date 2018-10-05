@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 import ForgotPassword.ForgotPassword;
+import Index.SimpleMD5;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import Index.index;
@@ -25,6 +26,7 @@ public class loginPage extends javax.swing.JFrame {
      * Creates new form loginPage
      */
     index ind = new index();
+    SimpleMD5 enc = new SimpleMD5();
     public loginPage() {
         this.setAlwaysOnTop(true);  //sets always on top
         this.setResizable(false);   //not resizable
@@ -163,7 +165,7 @@ public class loginPage extends javax.swing.JFrame {
             while(rset.next()) {   
             String empno = rset.getString(1);
             String pass = rset.getString(2);
-            if(usr.equals(empno) && pswd.equals(pass))
+            if(usr.equals(empno) && enc.encrypt(pswd).equals(pass))
             {
                 if(usr.endsWith("Mng"))
                 {
