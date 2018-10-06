@@ -6,7 +6,6 @@
 package loginPage;
 import java.sql.*;
 import java.awt.Toolkit;
-import javax.swing.JFrame;
 
 import ForgotPassword.ForgotPassword;
 import Index.SimpleMD5;
@@ -36,7 +35,6 @@ public class loginPage extends javax.swing.JFrame {
         int ysize = (int) tk.getScreenSize().getHeight();
         this.setSize(xsize, ysize);
     }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -160,14 +158,13 @@ public class loginPage extends javax.swing.JFrame {
         try{
             Statement stmt = ind.getconn().createStatement();
             String selectstmt = "select empno,password from logindetails";
-            ResultSet rset = stmt.executeQuery(selectstmt);
-            int rowCount = 0;    
+            ResultSet rset = stmt.executeQuery(selectstmt);    
             while(rset.next()) {   
             String empno = rset.getString(1);
             String pass = rset.getString(2);
             if(usr.equals(empno) && enc.encrypt(pswd).equals(pass))
             {
-                if(usr.endsWith("Mng"))
+                if(usr.equals("Mng"))
                 {
                     //forward to manager page
                     JFrame frame = new managerPage();
@@ -184,7 +181,6 @@ public class loginPage extends javax.swing.JFrame {
                     flag = true;
                 }
             }
-            ++rowCount;
          }
         }
         catch(SQLException se)

@@ -89,7 +89,6 @@ public class Checkout extends javax.swing.JFrame{
         jMenuBar1 = new javax.swing.JMenuBar();
         checkoutMenu = new javax.swing.JMenu();
         checkoutInv = new javax.swing.JMenuItem();
-        checkoutSales = new javax.swing.JMenuItem();
         checkoutLogout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -117,7 +116,15 @@ public class Checkout extends javax.swing.JFrame{
             new String [] {
                 "ProductID", "Name", "Base Price", "Quantity", "Cost"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(checkoutTable);
 
         jButton1.setText("Add Product");
@@ -178,10 +185,12 @@ public class Checkout extends javax.swing.JFrame{
         checkoutMenu.setText("Menu");
 
         checkoutInv.setText("Inventory");
+        checkoutInv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkoutInvActionPerformed(evt);
+            }
+        });
         checkoutMenu.add(checkoutInv);
-
-        checkoutSales.setText("Sales");
-        checkoutMenu.add(checkoutSales);
 
         checkoutLogout.setText("Log Out");
         checkoutLogout.addActionListener(new java.awt.event.ActionListener() {
@@ -334,7 +343,6 @@ public class Checkout extends javax.swing.JFrame{
                     Statement stmt = ind.getconn().createStatement();
                     String selectstmt = "select * from inventory";
                     ResultSet rset = stmt.executeQuery(selectstmt);
-                    int rowCount = 0;
                     int dbQty;
                     for(int i=0;i<m.getRowCount();i++)
                     {
@@ -348,7 +356,6 @@ public class Checkout extends javax.swing.JFrame{
                                     var = true;
                                 }
                             }
-                            ++rowCount;
                         }
                     }
                 }
@@ -382,8 +389,7 @@ public class Checkout extends javax.swing.JFrame{
                 try{
                     Statement stmt = ind.getconn().createStatement();
                     String selectstmt = "select * from inventory";
-                    ResultSet rset = stmt.executeQuery(selectstmt);
-                    int rowCount = 0;    
+                    ResultSet rset = stmt.executeQuery(selectstmt);   
                     while(rset.next()) {   
                         prodID = rset.getInt(1);
                         if(prodID==Integer.parseInt((String)productID))
@@ -393,7 +399,6 @@ public class Checkout extends javax.swing.JFrame{
                             dbQty = rset.getInt(4);
                             break;
                         }
-                        ++rowCount;
                     }
                 }
                 catch(SQLException se)
@@ -505,7 +510,6 @@ public class Checkout extends javax.swing.JFrame{
             String selectstmt = "select * from inventory",execstmt = "update inventory set quantity = ? where prodID = ?";
             ResultSet rset = stmt.executeQuery(selectstmt);
             PreparedStatement preparedStmt = ind.getconn().prepareStatement(execstmt);
-            int rowCount = 0;
             int dbQty,uiQty,newQty;
             for(int i=0;i<m.getRowCount();i++)
             {
@@ -520,7 +524,6 @@ public class Checkout extends javax.swing.JFrame{
                         preparedStmt.setInt(2, prodID);
                         preparedStmt.executeUpdate();
                     }
-                    ++rowCount;
                 }
             }
         }
@@ -567,6 +570,13 @@ public class Checkout extends javax.swing.JFrame{
     private void TotalCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalCostActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TotalCostActionPerformed
+
+    private void checkoutInvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkoutInvActionPerformed
+        //To empInv.class:
+        JFrame frame = new empInv();
+        frame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_checkoutInvActionPerformed
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -609,7 +619,6 @@ public class Checkout extends javax.swing.JFrame{
     private javax.swing.JMenuItem checkoutInv;
     private javax.swing.JMenuItem checkoutLogout;
     private javax.swing.JMenu checkoutMenu;
-    private javax.swing.JMenuItem checkoutSales;
     private javax.swing.JTable checkoutTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

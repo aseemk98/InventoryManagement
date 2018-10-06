@@ -56,7 +56,7 @@ public class SendMailTLS {
 			message.setRecipients(Message.RecipientType.TO,     
 				InternetAddress.parse(mail));
 			message.setSubject("Email Verification");
-			message.setText("Yout One Time Password is "+otp+".\nDo no share this with anyone.");
+			message.setText("Your One Time Password is "+otp+".\nDo no share this with anyone.");
 
 			Transport.send(message);
 

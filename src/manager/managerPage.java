@@ -4,8 +4,14 @@
  * and open the template in the editor.
  */
 package manager;
+import Index.index;
+import checkout.empInv;
 import java.awt.Toolkit;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 import loginPage.loginPage;
 
 /**
@@ -17,6 +23,7 @@ public class managerPage extends javax.swing.JFrame {
     /**
      * Creates new form managerPage
      */
+    index ind = new index();
     public managerPage() {
         this.setAlwaysOnTop(true);  //sets always on top
         this.setResizable(false);   //not resizable
@@ -26,7 +33,6 @@ public class managerPage extends javax.swing.JFrame {
         int ysize = (int) tk.getScreenSize().getHeight();
         this.setSize(xsize, ysize);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,9 +44,8 @@ public class managerPage extends javax.swing.JFrame {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         managerMenu = new javax.swing.JMenu();
-        managerOrders = new javax.swing.JMenuItem();
-        managerEmp = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        managerOrders = new javax.swing.JMenuItem();
         managerSales = new javax.swing.JMenuItem();
         managerLogout = new javax.swing.JMenuItem();
 
@@ -51,17 +56,6 @@ public class managerPage extends javax.swing.JFrame {
 
         managerMenu.setText("Menu");
 
-        managerOrders.setText("Orders");
-        managerOrders.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                managerOrdersActionPerformed(evt);
-            }
-        });
-        managerMenu.add(managerOrders);
-
-        managerEmp.setText("Employees");
-        managerMenu.add(managerEmp);
-
         jMenuItem1.setText("Inventory");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -70,7 +64,15 @@ public class managerPage extends javax.swing.JFrame {
         });
         managerMenu.add(jMenuItem1);
 
-        managerSales.setText("Sales");
+        managerOrders.setText("Orders");
+        managerOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                managerOrdersActionPerformed(evt);
+            }
+        });
+        managerMenu.add(managerOrders);
+
+        managerSales.setText("Employees");
         managerSales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 managerSalesActionPerformed(evt);
@@ -94,11 +96,11 @@ public class managerPage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 580, Short.MAX_VALUE)
+            .addGap(0, 620, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 554, Short.MAX_VALUE)
+            .addGap(0, 589, Short.MAX_VALUE)
         );
 
         pack();
@@ -109,7 +111,10 @@ public class managerPage extends javax.swing.JFrame {
     }//GEN-LAST:event_managerOrdersActionPerformed
 
     private void managerSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerSalesActionPerformed
-        // TODO add your handling code here:
+        //to addEmp:
+        JFrame frame = new addEmp();
+        frame.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_managerSalesActionPerformed
 
     private void managerLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerLogoutActionPerformed
@@ -120,7 +125,10 @@ public class managerPage extends javax.swing.JFrame {
     }//GEN-LAST:event_managerLogoutActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
+        //To empInv.class:
+        JFrame frame = new mngInv();
+        frame.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
@@ -154,6 +162,7 @@ public class managerPage extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new managerPage().setVisible(true);
+                //show sales page here!!
             }
         });
     }
@@ -161,7 +170,6 @@ public class managerPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem managerEmp;
     private javax.swing.JMenuItem managerLogout;
     private javax.swing.JMenu managerMenu;
     private javax.swing.JMenuItem managerOrders;
