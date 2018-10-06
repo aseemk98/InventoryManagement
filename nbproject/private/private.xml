@@ -3,10 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/InventoryManagement/src/Index/SimpleMD5.java</file>
+            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/InventoryManagement/src/Index/index.java</file>
+            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/InventoryManagement/src/loginPage/loginPage.java</file>
             <file>file:/C:/Users/Dell/Documents/NetBeansProjects/InventoryManagement/src/checkout/Checkout.java</file>
+            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/InventoryManagement/src/ForgotPassword/ForgotPassword.java</file>
             <file>file:/C:/Users/Dell/Documents/NetBeansProjects/InventoryManagement/src/manager/managerPage.java</file>
             <file>file:/C:/Users/Dell/Documents/NetBeansProjects/InventoryManagement/src/manager/addEmp.java</file>
+            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/InventoryManagement/src/loginPage/SendBillTLS.java</file>
         </group>
     </open-files>
 </project-private>
