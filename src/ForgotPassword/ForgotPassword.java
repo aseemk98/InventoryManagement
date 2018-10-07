@@ -327,7 +327,6 @@ public class ForgotPassword extends javax.swing.JFrame {
                     empMail = rset.getString(4);
                     if(EmailText.getText().equals(empMail))
                     {
-                        System.out.println(EmailText.getText()+"\n"+empMail+"\n"+newPswd);
                         preparedStmt.setString(1, enc.encrypt(newPswd));
                         preparedStmt.setString(2, empMail);
                         preparedStmt.executeUpdate();

@@ -32,6 +32,34 @@ public class managerPage extends javax.swing.JFrame {
         int xsize = (int) tk.getScreenSize().getWidth();
         int ysize = (int) tk.getScreenSize().getHeight();
         this.setSize(xsize, ysize);
+        fillTable();
+    }
+    public void fillTable(){
+        double val = 0;
+        DefaultTableModel m = (DefaultTableModel) saleTable.getModel();
+        m.setRowCount(0);
+        try{
+                Statement stmt = ind.getconn().createStatement();
+                String selectstmt = "select * from sales";
+                ResultSet rset = stmt.executeQuery(selectstmt);
+                while(rset.next()) {   
+                    String prodName = rset.getString(1);
+                    int sQty = rset.getInt(2);
+                    int rQty = rset.getInt(3);
+                    double amt = rset.getDouble(4);
+                    m.addRow(new Object[]{prodName,sQty,rQty,amt});
+                }
+        }
+        catch(SQLException se)
+        {
+           System.out.println(se);
+        }
+        for(int i=0;i<m.getRowCount();i++)
+        {
+            val+=(Double)m.getValueAt(i,3);
+        }
+        String temp = new Double(val).toString();
+        total.setText(temp);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,10 +70,13 @@ public class managerPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        saleTable = new javax.swing.JTable();
+        total = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         managerMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        managerOrders = new javax.swing.JMenuItem();
         managerSales = new javax.swing.JMenuItem();
         managerLogout = new javax.swing.JMenuItem();
 
@@ -53,6 +84,18 @@ public class managerPage extends javax.swing.JFrame {
         setTitle("WELCOME!!!");
         setResizable(false);
         setSize(new java.awt.Dimension(580, 580));
+
+        saleTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Product Name", "Sold", "In Stock", "Amount"
+            }
+        ));
+        jScrollPane1.setViewportView(saleTable);
+
+        jLabel1.setText("Total:");
 
         managerMenu.setText("Menu");
 
@@ -63,14 +106,6 @@ public class managerPage extends javax.swing.JFrame {
             }
         });
         managerMenu.add(jMenuItem1);
-
-        managerOrders.setText("Orders");
-        managerOrders.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                managerOrdersActionPerformed(evt);
-            }
-        });
-        managerMenu.add(managerOrders);
 
         managerSales.setText("Employees");
         managerSales.addActionListener(new java.awt.event.ActionListener() {
@@ -96,19 +131,27 @@ public class managerPage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 589, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(total, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void managerOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerOrdersActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_managerOrdersActionPerformed
 
     private void managerSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerSalesActionPerformed
         //to addEmp:
@@ -168,11 +211,14 @@ public class managerPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem managerLogout;
     private javax.swing.JMenu managerMenu;
-    private javax.swing.JMenuItem managerOrders;
     private javax.swing.JMenuItem managerSales;
+    private javax.swing.JTable saleTable;
+    private javax.swing.JLabel total;
     // End of variables declaration//GEN-END:variables
 }

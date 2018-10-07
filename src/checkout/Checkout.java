@@ -303,10 +303,10 @@ public class Checkout extends javax.swing.JFrame{
         // Remove Row:
         DefaultTableModel model = (DefaultTableModel) checkoutTable.getModel();
         int i = checkoutTable.getSelectedRow();
-        tCost = tCost - ((Integer)model.getValueAt(i,4 ));
+        tCost = tCost - ((Double)model.getValueAt(i,4 ));
         double tax=0.025*tCost;
-        SgstLabel.setText(Double.toString(tax));    
-        CgstLabel.setText(Double.toString(tax));
+        SgstLabel.setText(String.format("%.2f",tax));    
+        CgstLabel.setText(String.format("%.2f",tax));
         double fCost = tCost + 2*tax;
         TotalCost.setText(Double.toString(fCost));
         model.removeRow(checkoutTable.getSelectedRow());
@@ -371,8 +371,8 @@ public class Checkout extends javax.swing.JFrame{
                     m.setValueAt(ProCost, row, 4);
                     tCost = (double)ProCost;
                     double tax=0.025*tCost;
-                    SgstLabel.setText(Double.toString(tax));    
-                    CgstLabel.setText(Double.toString(tax));
+                    SgstLabel.setText(String.format("%.2f",tax));    
+                    CgstLabel.setText(String.format("%.2f",tax));
                     double fCost = tCost + 2*tax;
                     TotalCost.setText(Double.toString(fCost));
                 }
@@ -415,8 +415,8 @@ public class Checkout extends javax.swing.JFrame{
                     model.addRow(new Object[]{productID,prodName,BasePr,quantity,ProCost});
                     tCost = tCost+ProCost;
                     double tax=0.025*tCost;
-                    SgstLabel.setText(Double.toString(tax));    
-                    CgstLabel.setText(Double.toString(tax));
+                    SgstLabel.setText(String.format("%.2f",tax));  
+                    CgstLabel.setText(String.format("%.2f",tax));
                     double fCost = tCost + 2*tax;
                     TotalCost.setText(Double.toString(fCost));  
                 }
@@ -454,11 +454,11 @@ public class Checkout extends javax.swing.JFrame{
         tCost = 0.0;
         for(int i=0;i<checkoutTable.getRowCount();i++)
         {
-            tCost += (Integer)m.getValueAt(i, 4);
+            tCost += (Double)m.getValueAt(i, 4);
         }
         double tax=0.025*tCost;
-        SgstLabel.setText(Double.toString(tax));    
-        CgstLabel.setText(Double.toString(tax));
+        SgstLabel.setText(String.format("%.2f",tax));    
+        CgstLabel.setText(String.format("%.2f",tax));
         double fCost = tCost + 2*tax;
         TotalCost.setText(Double.toString(fCost));
         QuantText.setValue(1);
@@ -483,8 +483,8 @@ public class Checkout extends javax.swing.JFrame{
             }
             tCost -= tCost*discount;
             double tax=0.025*tCost;
-            SgstLabel.setText(Double.toString(tax));    
-            CgstLabel.setText(Double.toString(tax));
+            SgstLabel.setText(String.format("%.2f",tax));    
+            CgstLabel.setText(String.format("%.2f",tax));
             double fCost = tCost + 2*tax;
             TotalCost.setText(Double.toString(fCost));
             jButton4.setEnabled(false);
@@ -531,6 +531,51 @@ public class Checkout extends javax.swing.JFrame{
         {
            System.out.println(se);
         }
+        //Add to Sales:
+        double amt;
+        String name;
+        int qty,prodId;
+        DefaultTableModel m = (DefaultTableModel) checkoutTable.getModel();
+        for(int i=0;i<m.getRowCount();i++)
+        {
+            prodId = Integer.parseInt((String)m.getValueAt(i,0));
+            name = (String)m.getValueAt(i,1);            
+            qty = (Integer)m.getValueAt(i,3);
+            amt = (Double)m.getValueAt(i,4);
+            String temp = name.toLowerCase();
+            try{
+                int sQty=0;
+                Boolean flag=true;
+                Statement stmt = ind.getconn().createStatement(),gQty = ind.getconn().createStatement();
+                String selectstmt = "select * from sales",getrQty="select quantity from inventory where prodId = "+prodId;
+                ResultSet rset = stmt.executeQuery(selectstmt),set = gQty.executeQuery(getrQty);
+                while(rset.next())
+                {
+                    String prodName = rset.getString(1).toLowerCase();
+                    if(rset.getString(2)!=null)
+                    {
+                        sQty = rset.getInt(2);
+                        if(prodName.equals(temp))
+                        {
+                            selectstmt = "update sales set rQty=rQty-"+qty+", amt=amt+"+amt+", sQty=sQty+"+qty+" where prodName = '"+name+"' and sQty = "+sQty;
+                            stmt.executeUpdate(selectstmt);
+                            flag = false;
+                            break;
+                        } 
+                    }                      
+                }              
+                if(flag)
+                {
+                    set.next();
+                    selectstmt = "insert into sales values('"+name+"',"+qty+","+set.getInt(1)+","+amt+")";
+                    stmt.executeUpdate(selectstmt);
+                }
+            }
+            catch(SQLException se)
+            {
+                System.out.println(se);
+            }
+        }
         //Print Bill:
         try {
             String pathToExportTo="d:/SDL/InventoryManagement/src/checkout/bill.csv";
@@ -558,13 +603,12 @@ public class Checkout extends javax.swing.JFrame{
             TotalCost.setText("");
             Discount.setText("");
             jButton4.setEnabled(true);
-       } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         String id = JOptionPane.showInputDialog(this,"Enter Email ID:");
         SendBillTLS object=new SendBillTLS(id);
         object.Execute();
-        
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void TotalCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalCostActionPerformed

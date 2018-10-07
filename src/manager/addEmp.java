@@ -35,15 +35,15 @@ public class addEmp extends javax.swing.JFrame {
              
             Statement stmt = ind.getconn().createStatement();
             String execst = "select* from ManagerView";
-            ResultSet res = stmt.executeQuery(execst);
+            ResultSet rset = stmt.executeQuery(execst);
             DefaultTableModel mod = (DefaultTableModel) empTable.getModel();
             mod.setRowCount(0);
             empTable.setModel(mod);
-            while(res.next()){
-                String empNo = res.getString(1);
-                String empName = res.getString(2);
-                String phone = res.getString(3);
-                String email = res.getString(4);
+            while(rset.next()){
+                String empNo = rset.getString(1);
+                String empName = rset.getString(2);
+                String phone = rset.getString(3);
+                String email = rset.getString(4);
                 mod.addRow(new Object[]{empNo,empName,phone,email});
 
             }
@@ -93,7 +93,6 @@ public class addEmp extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
 
@@ -154,9 +153,6 @@ public class addEmp extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem1);
-
-        jMenuItem2.setText("Orders");
-        jMenu1.add(jMenuItem2);
 
         jMenuItem3.setText("Sales");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -364,7 +360,6 @@ public class addEmp extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;

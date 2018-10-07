@@ -7,6 +7,7 @@ package manager;
 
 import Index.index;
 import java.awt.Toolkit;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,7 +27,7 @@ public class mngInv extends javax.swing.JFrame {
     index ind = new index();
     private int prodID;
     private String prodName;
-    private int deptNo;
+    private String deptName;
     private int qty;
     private Double basePr;
     private String dist;
@@ -46,17 +47,17 @@ public class mngInv extends javax.swing.JFrame {
         m.setRowCount(0);
         try{
                 Statement stmt = ind.getconn().createStatement();
-                String selectstmt = "select * from inventory";
+                String selectstmt = "select * from inventoryview";
                 ResultSet rset = stmt.executeQuery(selectstmt);
                 while(rset.next()) {   
                     prodID = rset.getInt(1);
                     prodName = rset.getString(2);
-                    deptNo = rset.getInt(3);
+                    brand = rset.getString(3);
                     qty = rset.getInt(4);
                     basePr = rset.getDouble(5);
                     dist = rset.getString(6);
-                    brand = rset.getString(7);
-                    m.addRow(new Object[]{prodID,prodName,brand,qty,basePr,dist,deptNo});
+                    deptName = rset.getString(7);
+                    m.addRow(new Object[]{prodID,prodName,brand,qty,basePr,dist,deptName});
                 }
         }
         catch(SQLException se)
@@ -64,22 +65,44 @@ public class mngInv extends javax.swing.JFrame {
            System.out.println(se);
         }
     }
-    
+    public void fillWithQty(){
+        DefaultTableModel m = (DefaultTableModel) invTable.getModel();
+        m.setRowCount(0);
+        try{
+                Statement stmt = ind.getconn().createStatement();
+                String selectstmt = "select * from orderview";
+                ResultSet rset = stmt.executeQuery(selectstmt);
+                while(rset.next()) {   
+                    prodID = rset.getInt(1);
+                    prodName = rset.getString(2);
+                    brand = rset.getString(3);
+                    qty = rset.getInt(4);
+                    basePr = rset.getDouble(5);
+                    dist = rset.getString(6);
+                    deptName = rset.getString(7);
+                    m.addRow(new Object[]{prodID,prodName,brand,qty,basePr,dist,deptName});
+                }
+        }
+        catch(SQLException se)
+        {
+           System.out.println(se);
+        }
+    }
     public void fillWithID(String prodID){
         DefaultTableModel m = (DefaultTableModel) invTable.getModel();
         m.setRowCount(0);
         try{
                 Statement stmt = ind.getconn().createStatement();
-                String selectstmt = "select * from inventory where prodID = " + prodID;
+                String selectstmt = "select * from inventoryview where prodID = " + prodID;
                 ResultSet rset = stmt.executeQuery(selectstmt);
                 rset.next();
                 prodName = rset.getString(2);
-                deptNo = rset.getInt(3);
+                deptName = rset.getString(7);
                 qty = rset.getInt(4);
                 basePr = rset.getDouble(5);
                 dist = rset.getString(6);
-                brand = rset.getString(7);
-                m.addRow(new Object[]{prodID,prodName,brand,qty,basePr,dist,deptNo});
+                brand = rset.getString(3);
+                m.addRow(new Object[]{prodID,prodName,brand,qty,basePr,dist,deptName});
         }
         catch(SQLException se)
         {
@@ -91,16 +114,19 @@ public class mngInv extends javax.swing.JFrame {
         m.setRowCount(0);
         try{
                 Statement stmt = ind.getconn().createStatement();
-                String selectstmt = "select * from inventory where prodName = '" + prodName + "'";
+                String selectstmt = "select * from inventoryview where lower(prodName) like '%" + prodName + "%'";
                 ResultSet rset = stmt.executeQuery(selectstmt);
-                rset.next();
-                prodID = rset.getInt(1);
-                deptNo = rset.getInt(3);
-                qty = rset.getInt(4);
-                basePr = rset.getDouble(5);
-                dist = rset.getString(6);
-                brand = rset.getString(7);
-                m.addRow(new Object[]{prodID,prodName,brand,qty,basePr,dist,deptNo});
+                while(rset.next())
+                {
+                    prodID = rset.getInt(1);
+                    this.prodName = rset.getString(2);
+                    deptName = rset.getString(7);
+                    qty = rset.getInt(4);
+                    basePr = rset.getDouble(5);
+                    dist = rset.getString(6);
+                    brand = rset.getString(3);
+                    m.addRow(new Object[]{prodID,this.prodName,brand,qty,basePr,dist,deptName});
+                }
         }
         catch(SQLException se)
         {
@@ -112,37 +138,42 @@ public class mngInv extends javax.swing.JFrame {
         m.setRowCount(0);
         try{
                 Statement stmt = ind.getconn().createStatement();
-                String selectstmt = "select * from inventory where brand = '" + brand + "'";
+                String selectstmt = "select * from inventoryview where lower(brand) like '%" + brand + "%'";
                 ResultSet rset = stmt.executeQuery(selectstmt);
-                rset.next();
-                prodID = rset.getInt(1);
-                prodName = rset.getString(2);
-                deptNo = rset.getInt(3);
-                qty = rset.getInt(4);
-                basePr = rset.getDouble(5);
-                dist = rset.getString(6);
-                m.addRow(new Object[]{prodID,prodName,brand,qty,basePr,dist,deptNo});
+                while(rset.next())
+                {
+                    prodID = rset.getInt(1);
+                    prodName = rset.getString(2);
+                    this.brand = rset.getString(3);
+                    deptName = rset.getString(7);
+                    qty = rset.getInt(4);
+                    basePr = rset.getDouble(5);
+                    dist = rset.getString(6);
+                    m.addRow(new Object[]{prodID,prodName,this.brand,qty,basePr,dist,deptName});
+                }
         }
         catch(SQLException se)
         {
            System.out.println(se);
         }
     }
-    public void fillWithDept(String deptNo){
+    public void fillWithDept(String deptName){
         DefaultTableModel m = (DefaultTableModel) invTable.getModel();
         m.setRowCount(0);
         try{
                 Statement stmt = ind.getconn().createStatement();
-                String selectstmt = "select * from inventory where deptno = '" + deptNo + "'";
+                String selectstmt = "select * from inventoryview where lower(deptName) like '%" + deptName + "%'";
                 ResultSet rset = stmt.executeQuery(selectstmt);
-                while(rset.next()) {   
+                while(rset.next()) 
+                {   
                     prodID = rset.getInt(1);
                     prodName = rset.getString(2);
-                    brand = rset.getString(7);
+                    brand = rset.getString(3);
                     qty = rset.getInt(4);
                     basePr = rset.getDouble(5);
                     dist = rset.getString(6);
-                    m.addRow(new Object[]{prodID,prodName,brand,qty,basePr,dist,deptNo});
+                    this.deptName = rset.getString(7);
+                    m.addRow(new Object[]{prodID,prodName,brand,qty,basePr,dist,this.deptName});
                 }
         }
         catch(SQLException se)
@@ -160,6 +191,7 @@ public class mngInv extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        search = new javax.swing.ButtonGroup();
         inID = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         inName = new javax.swing.JTextField();
@@ -171,9 +203,16 @@ public class mngInv extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         inBrand = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        idBtn = new javax.swing.JRadioButton();
+        nameBtn = new javax.swing.JRadioButton();
+        brandBtn = new javax.swing.JRadioButton();
+        deptBtn = new javax.swing.JRadioButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        inQty = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -195,12 +234,21 @@ public class mngInv extends javax.swing.JFrame {
             }
         });
 
+        invTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                int col = invTable.columnAtPoint(evt.getPoint());
+                if(col==3){
+                    fillWithQty();
+                }
+            }
+        });
         invTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Product ID", "Product Name", "Brand", "Quantity", "Base Price", "Distributor", "DeptNo"
+                "Product ID", "Product Name", "Brand", "Quantity", "Base Price", "Distributor", "Department Name"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -215,14 +263,62 @@ public class mngInv extends javax.swing.JFrame {
 
         jLabel4.setText("Department:");
 
+        inDept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inDeptActionPerformed(evt);
+            }
+        });
+
         jLabel3.setText("Brand:");
 
         jLabel1.setText("Product ID:");
 
-        jMenu1.setText("Menu");
+        search.add(idBtn);
+        idBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idBtnActionPerformed(evt);
+            }
+        });
 
-        jMenuItem1.setText("Orders");
-        jMenu1.add(jMenuItem1);
+        search.add(nameBtn);
+        nameBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameBtnActionPerformed(evt);
+            }
+        });
+
+        search.add(brandBtn);
+        brandBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                brandBtnActionPerformed(evt);
+            }
+        });
+
+        search.add(deptBtn);
+        deptBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deptBtnActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Reset");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel5.setText("Quantity:");
+
+        jButton3.setText("Order");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jMenu1.setText("Menu");
 
         jMenuItem2.setText("Sales");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -258,7 +354,11 @@ public class mngInv extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(168, Short.MAX_VALUE)
+                .addContainerGap(101, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(brandBtn)
+                    .addComponent(idBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -266,30 +366,51 @@ public class mngInv extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(inID, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(161, 161, 161)
+                        .addGap(135, 135, 135)
+                        .addComponent(nameBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(inBrand, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deptBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel4)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(inName, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(inName, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(inDept, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(inQty, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(inID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(inName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(idBtn)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(inID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(inName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1))
+                    .addComponent(nameBtn))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -298,9 +419,18 @@ public class mngInv extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
                         .addComponent(inDept, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1)))
+                        .addComponent(jButton2))
+                    .addComponent(brandBtn)
+                    .addComponent(deptBtn))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(inQty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3)
+                .addContainerGap())
         );
 
         pack();
@@ -317,35 +447,21 @@ public class mngInv extends javax.swing.JFrame {
         prodName = inName.getText();
         brand = inBrand.getText();
         dept = inDept.getText();
-        if(prodID.equals("")&&prodName.equals("")&&brand.equals("")&&dept.equals(""))
+        if(search.getSelection().getActionCommand()=="id")
         {
-            fillTable();
+            fillWithID(prodID);
         }
-        else
+        else if(search.getSelection().getActionCommand()=="brand")
         {
-            if(brand.equals(""))
-            {
-                if(prodID.equals(""))
-                {
-                    //use prodName
-                    fillWithName(prodName);
-                }
-                else
-                {
-                    //use prodID
-                    fillWithID(prodID);
-                }
-            }
-            else if(dept.equals(""))
-            {
-                //use dept
-                fillWithDept(dept);
-            }
-            else
-            {
-                //use brand
-                fillWithBrand(brand);
-            }
+            fillWithBrand(brand);
+        }
+        else if(search.getSelection().getActionCommand()=="name")
+        {
+            fillWithName(prodName);
+        }
+        else if(search.getSelection().getActionCommand()=="dept")
+        {
+            fillWithDept(dept);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -369,6 +485,108 @@ public class mngInv extends javax.swing.JFrame {
         frame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void inDeptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inDeptActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inDeptActionPerformed
+
+    private void idBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idBtnActionPerformed
+        //idBtn:
+        idBtn.setActionCommand("id");
+    }//GEN-LAST:event_idBtnActionPerformed
+
+    private void nameBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameBtnActionPerformed
+        //nameBtn:
+        nameBtn.setActionCommand("name");
+    }//GEN-LAST:event_nameBtnActionPerformed
+
+    private void brandBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brandBtnActionPerformed
+        //brandBtn:
+        brandBtn.setActionCommand("brand");
+    }//GEN-LAST:event_brandBtnActionPerformed
+
+    private void deptBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deptBtnActionPerformed
+        //deptBtn:
+        deptBtn.setActionCommand("dept");
+    }//GEN-LAST:event_deptBtnActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //reset table:
+        fillTable();
+        inID.setText("");
+        inBrand.setText("");
+        inDept.setText("");
+        inName.setText("");
+        search.clearSelection();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        //Order:
+        int qty;
+        double basePr,amt;
+        int prodId;
+        String name;
+        qty = Integer.parseInt((String)inQty.getText());
+        DefaultTableModel m = (DefaultTableModel) invTable.getModel();
+        int row = invTable.getSelectedRow();
+        prodId = (Integer)m.getValueAt(row,0);
+        name = (String)m.getValueAt(row,1);
+        name = name.toLowerCase();
+        basePr = (Double)m.getValueAt(row,4);
+        amt = basePr*qty;
+        if(qty>100)
+        {
+            //discount 10%
+            amt = amt-amt*0.1;
+        }
+        else if(qty>50)
+        {
+            //discount 5%
+            amt = amt-amt*0.05;
+        }
+        else if(qty>30)
+        {
+            //discount 2%
+            amt = amt-amt*0.02;
+        }
+        amt = -amt;
+        try{
+            String sQty="";
+            name = (String)m.getValueAt(row,1);
+            String temp = name.toLowerCase();
+            Statement stmt = ind.getconn().createStatement();
+            String selectstmt = "update inventory set quantity = quantity + "+qty+" where prodId = "+prodId;
+            stmt.executeUpdate(selectstmt);
+            fillTable();
+            selectstmt = "select * from sales";
+            ResultSet rset = stmt.executeQuery(selectstmt);
+            while(rset.next()){
+                String prodName = rset.getString(1).toLowerCase();
+                if(rset.getString(2)==null)
+                {
+                    sQty = "";
+                }
+                else
+                {
+                    sQty = rset.getString(2);
+                }
+                if(prodName.equals(temp)&&sQty.equals(""))
+                {
+                    selectstmt = "update sales set rQty=rQty+"+qty+", amt=amt+"+amt+" where prodName = '"+name+"' and sQty is null";
+                }
+                else
+                {
+                    selectstmt = "insert into sales"+"(prodname,rqty,amt)"+" values('"+name+"',"+qty+","+amt+")";
+                }
+                stmt.executeUpdate(selectstmt);
+            }
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        inQty.setText("");
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -406,22 +624,30 @@ public class mngInv extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton brandBtn;
+    private javax.swing.JRadioButton deptBtn;
+    private javax.swing.JRadioButton idBtn;
     private javax.swing.JTextField inBrand;
     private javax.swing.JTextField inDept;
     private javax.swing.JTextField inID;
     private javax.swing.JTextField inName;
+    private javax.swing.JTextField inQty;
     private javax.swing.JTable invTable;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton nameBtn;
+    private javax.swing.ButtonGroup search;
     // End of variables declaration//GEN-END:variables
 }
