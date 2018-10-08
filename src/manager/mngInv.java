@@ -554,12 +554,13 @@ public class mngInv extends javax.swing.JFrame {
             String sQty="";
             name = (String)m.getValueAt(row,1);
             String temp = name.toLowerCase();
-            Statement stmt = ind.getconn().createStatement();
+            Statement stmt = ind.getconn().createStatement(),setQty = ind.getconn().createStatement();
             String selectstmt = "update inventory set quantity = quantity + "+qty+" where prodId = "+prodId;
             stmt.executeUpdate(selectstmt);
             fillTable();
             selectstmt = "select * from sales";
-            ResultSet rset = stmt.executeQuery(selectstmt);
+            String getQty = "select quantity from inventory where prodId = "+prodId;
+            ResultSet rset = stmt.executeQuery(selectstmt),qset = setQty.executeQuery(getQty);
             while(rset.next()){
                 String prodName = rset.getString(1).toLowerCase();
                 if(rset.getString(2)==null)
@@ -572,11 +573,13 @@ public class mngInv extends javax.swing.JFrame {
                 }
                 if(prodName.equals(temp)&&sQty.equals(""))
                 {
-                    selectstmt = "update sales set rQty=rQty+"+qty+", amt=amt+"+amt+" where prodName = '"+name+"' and sQty is null";
+                    selectstmt = "update sales set rQty=rQty+"+qty+", amt=amt+"+amt+" where prodName = '"+name+"' and sQty is null";                    
                 }
                 else
                 {
-                    selectstmt = "insert into sales"+"(prodname,rqty,amt)"+" values('"+name+"',"+qty+","+amt+")";
+                    qset.next();
+                    int rQty = qset.getInt(1);
+                    selectstmt = "insert into sales"+"(prodname,rqty,amt)"+" values('"+name+"',"+rQty+","+amt+")";
                 }
                 stmt.executeUpdate(selectstmt);
             }

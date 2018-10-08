@@ -607,8 +607,11 @@ public class Checkout extends javax.swing.JFrame{
             e.printStackTrace();
         }
         String id = JOptionPane.showInputDialog(this,"Enter Email ID:");
-        SendBillTLS object=new SendBillTLS(id);
-        object.Execute();
+        if(id!=null)
+        {
+            SendBillTLS object=new SendBillTLS(id);
+            object.Execute();
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void TotalCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalCostActionPerformed
