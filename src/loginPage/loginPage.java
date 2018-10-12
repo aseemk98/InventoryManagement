@@ -5,13 +5,10 @@
  */
 package loginPage;
 import java.sql.*;
-import java.awt.Toolkit;
-
 import ForgotPassword.ForgotPassword;
 import Index.SimpleMD5;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import Index.index;
 import checkout.Checkout;
 import manager.managerPage;
 
@@ -24,16 +21,29 @@ public class loginPage extends javax.swing.JFrame {
     /**
      * Creates new form loginPage
      */
-    index ind = new index();
     SimpleMD5 enc = new SimpleMD5();
+    private Connection conn;
     public loginPage() {
         this.setAlwaysOnTop(true);  //sets always on top
         this.setResizable(false);   //not resizable
         initComponents();
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        int xsize = (int) tk.getScreenSize().getWidth();
-        int ysize = (int) tk.getScreenSize().getHeight();
-        this.setSize(xsize, ysize);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        String url = "jdbc:derby://localhost:1527/";
+        String dbName = "Inventory";
+        String driver = "com.mysql.jdbc.Driver";
+        String userName = "inv";
+        String password = "inv";
+        try {
+            Class.forName(driver).newInstance();
+            conn = DriverManager.getConnection(url+dbName,userName,password);
+            System.out.println("Connected to the database");
+        } catch (Exception se)
+        {
+            System.out.println(se);
+        }
+    }
+    public Connection getconn(){
+        return conn;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -156,7 +166,7 @@ public class loginPage extends javax.swing.JFrame {
         String pswd = passwordIn.getText();
         Boolean flag = false;
         try{
-            Statement stmt = ind.getconn().createStatement();
+            Statement stmt = getconn().createStatement();
             String selectstmt = "select empno,password from logindetails";
             ResultSet rset = stmt.executeQuery(selectstmt);    
             while(rset.next()) {   

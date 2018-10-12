@@ -10,7 +10,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JFrame;
 import loginPage.SendBillTLS;
 import loginPage.loginPage;
-import Index.index;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,15 +33,12 @@ public class Checkout extends javax.swing.JFrame{
     int prodID;//from db
     String productID;//from ui
     String prodName;
-    index ind = new index();    
+    loginPage ind = new loginPage();    
     public Checkout() {
         this.setAlwaysOnTop(true);  //sets always on top
         this.setResizable(false);   //not resizable
         initComponents();
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        int xsize = (int) tk.getScreenSize().getWidth();
-        int ysize = (int) tk.getScreenSize().getHeight();
-        this.setSize(xsize, ysize);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         tCost=0.0;
         ProCost = 0.0;
         BasePr = 0.0;
@@ -385,7 +381,7 @@ public class Checkout extends javax.swing.JFrame{
             }
             else{
                 //Code for getting product values goes here
-                int dbQty=0,temp=0;
+                int dbQty=0;
                 try{
                     Statement stmt = ind.getconn().createStatement();
                     String selectstmt = "select * from inventory";
@@ -542,34 +538,13 @@ public class Checkout extends javax.swing.JFrame{
             name = (String)m.getValueAt(i,1);            
             qty = (Integer)m.getValueAt(i,3);
             amt = (Double)m.getValueAt(i,4);
-            String temp = name.toLowerCase();
             try{
-                int sQty=0;
-                Boolean flag=true;
-                Statement stmt = ind.getconn().createStatement(),gQty = ind.getconn().createStatement();
-                String selectstmt = "select * from sales",getrQty="select quantity from inventory where prodId = "+prodId;
-                ResultSet rset = stmt.executeQuery(selectstmt),set = gQty.executeQuery(getrQty);
-                while(rset.next())
-                {
-                    String prodName = rset.getString(1).toLowerCase();
-                    if(rset.getString(2)!=null)
-                    {
-                        sQty = rset.getInt(2);
-                        if(prodName.equals(temp))
-                        {
-                            selectstmt = "update sales set rQty=rQty-"+qty+", amt=amt+"+amt+", sQty=sQty+"+qty+" where prodName = '"+name+"' and sQty = "+sQty;
-                            stmt.executeUpdate(selectstmt);
-                            flag = false;
-                            break;
-                        } 
-                    }                      
-                }              
-                if(flag)
-                {
-                    set.next();
-                    selectstmt = "insert into sales values('"+name+"',"+qty+","+set.getInt(1)+","+amt+")";
+                    Statement stmt = ind.getconn().createStatement(),gQty = ind.getconn().createStatement();
+                    String selectstmt,getrQty="select quantity from inventory where prodId = "+prodId;
+                    ResultSet rset = gQty.executeQuery(getrQty);
+                    rset.next(); 
+                    selectstmt = "insert into sales values('"+name+"',"+qty+","+rset.getInt(1)+","+amt+")";
                     stmt.executeUpdate(selectstmt);
-                }
             }
             catch(SQLException se)
             {
@@ -578,7 +553,7 @@ public class Checkout extends javax.swing.JFrame{
         }
         //Print Bill:
         try {
-            String pathToExportTo="d:/SDL/InventoryManagement/src/checkout/bill.csv";
+            String pathToExportTo="./bill.csv";
             DefaultTableModel model = (DefaultTableModel) checkoutTable.getModel();
             FileWriter csv = new FileWriter(new File(pathToExportTo));
 

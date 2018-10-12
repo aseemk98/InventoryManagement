@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 package manager;
-import Index.index;
-import checkout.empInv;
-import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,15 +20,12 @@ public class managerPage extends javax.swing.JFrame {
     /**
      * Creates new form managerPage
      */
-    index ind = new index();
+    loginPage ind = new loginPage();
     public managerPage() {
         this.setAlwaysOnTop(true);  //sets always on top
         this.setResizable(false);   //not resizable
         initComponents();
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        int xsize = (int) tk.getScreenSize().getWidth();
-        int ysize = (int) tk.getScreenSize().getHeight();
-        this.setSize(xsize, ysize);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         fillTable();
     }
     public void fillTable(){
@@ -90,7 +84,7 @@ public class managerPage extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Product Name", "Sold", "In Stock", "Amount"
+                "Product Name", "Sold/Ordered", "In Stock", "Amount"
             }
         ));
         jScrollPane1.setViewportView(saleTable);

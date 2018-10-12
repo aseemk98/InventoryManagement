@@ -6,7 +6,6 @@
 package manager;
 
 import Index.SimpleMD5;
-import Index.index;
 import java.awt.Toolkit;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +26,7 @@ public class addEmp extends javax.swing.JFrame {
     /**
      * Creates new form addEmp
      */
-    index ind = new index();
+    loginPage ind = new loginPage();
     SimpleMD5 enc = new SimpleMD5();
     public void updateTable(){
           try {  
@@ -61,10 +60,7 @@ public class addEmp extends javax.swing.JFrame {
             this.setAlwaysOnTop(true);  //sets always on top
             this.setResizable(false);   //not resizable
             initComponents();
-            Toolkit tk = Toolkit.getDefaultToolkit();
-            int xsize = (int) tk.getScreenSize().getWidth();
-            int ysize = (int) tk.getScreenSize().getHeight();
-            this.setSize(xsize, ysize);
+            this.setExtendedState(JFrame.MAXIMIZED_BOTH);
             updateTable();
 
     }

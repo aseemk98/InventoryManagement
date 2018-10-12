@@ -1,15 +1,16 @@
 package ForgotPassword;
 
+
 import Index.SimpleMD5;
-import Index.index;
 import java.security.SecureRandom;
 import javax.swing.JOptionPane;
 import loginPage.loginPage;
-import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JFrame;
+
 
 public class ForgotPassword extends javax.swing.JFrame {
     
@@ -19,15 +20,12 @@ public class ForgotPassword extends javax.swing.JFrame {
      * Creates new form ForgotPassword
      */
     SimpleMD5 enc = new SimpleMD5();
-    index ind = new index(); 
+    loginPage ind = new loginPage();
     public ForgotPassword() {
         this.setAlwaysOnTop(true);  //sets always on top
         this.setResizable(false);   //not resizable
         initComponents();
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        int xsize = (int) tk.getScreenSize().getWidth();
-        int ysize = (int) tk.getScreenSize().getHeight();
-        this.setSize(xsize, ysize);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         ChildPanel.setVisible(false);
         ChildChild.setVisible(false);
     }
