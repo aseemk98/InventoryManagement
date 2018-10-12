@@ -1,0 +1,12 @@
+ProductID,Name,Base Price,Quantity,Cost,
+101,Butter,225.0,1,225.0,
+302,Plastic Basket,142.0,1,142.0,
+203,Bathing Soap,40.0,1,40.0,
+503,Tomato,22.0,1,22.0,
+702,Sausage Chicken,145.0,1,145.0,
+
+
+Sgst,14.35
+Cgst,14.35
+CODE,
+Total,602.7

@@ -33,6 +33,7 @@ public class Checkout extends javax.swing.JFrame{
     int prodID;//from db
     String productID;//from ui
     String prodName;
+    String offers[] = {"GRAB10","GET20","SALE30"};
     loginPage ind = new loginPage();    
     public Checkout() {
         this.setAlwaysOnTop(true);  //sets always on top
@@ -467,10 +468,29 @@ public class Checkout extends javax.swing.JFrame{
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // Discount:
         DefaultTableModel m = (DefaultTableModel) checkoutTable.getModel();
-        double discount = 0.2;
+        Boolean var = false;
+        double discount = 0.0;
         String code;
-        code = Discount.getText().toLowerCase();
-        if(code.equals("bhikari"))
+        code = Discount.getText();
+        for(String offer : offers)
+        {
+            if(offer.equals(code.toUpperCase()))
+            {
+                switch (offer) {
+                    case "GRAB10":
+                        discount = 0.1;
+                        break;
+                    case "GET20":
+                        discount = 0.2;
+                        break;
+                    default:
+                        discount = 0.3;
+                        break;
+                }
+                var = true;
+            }
+        }
+        if(var)
         {
             tCost = 0.0;
             for(int i=0;i<checkoutTable.getRowCount();i++)
