@@ -12,10 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import loginPage.loginPage;
 
-/**
- *
- * @author Atharva
- */
+
 public class empInv extends javax.swing.JFrame {
 
     /**
@@ -380,9 +377,9 @@ public class empInv extends javax.swing.JFrame {
         //Find Item:
         String prodID, prodName, brand, dept;
         prodID = inID.getText();
-        prodName = inName.getText();
-        brand = inBrand.getText();
-        dept = inDept.getText();
+        prodName = inName.getText().toLowerCase();
+        brand = inBrand.getText().toLowerCase();
+        dept = inDept.getText().toLowerCase();
         if(search.getSelection().getActionCommand()=="id")
         {
             fillWithID(prodID);

@@ -6,10 +6,6 @@ package loginPage;
  * and open the template in the editor.
  */
 
-/**
- *
- * @author awasa
- */
 import java.io.IOException;
 import java.util.Properties;
 import javax.mail.Message;

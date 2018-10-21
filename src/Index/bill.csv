@@ -1,0 +1,10 @@
+ProductID,Name,Base Price,Quantity,Cost,
+501,Onion,26.0,1,26.0,
+309,Glass Set,345.0,1,345.0,
+101,Butter,225.0,1,225.0,
+
+
+Sgst,14.90
+Cgst,14.90
+CODE,
+Total,625.8

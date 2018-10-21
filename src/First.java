@@ -9,10 +9,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import loginPage.loginPage;
 
-/**
- *
- * @author Atharva
- */
 public class First extends Application {
     @Override
     public void start(Stage primaryStage) {

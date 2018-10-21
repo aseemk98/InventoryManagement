@@ -17,10 +17,6 @@ import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import loginPage.loginPage;
 
-/**
- *
- * @author Atharva
- */
 public class addEmp extends javax.swing.JFrame {
 
     /**

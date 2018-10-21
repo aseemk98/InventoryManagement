@@ -6,10 +6,6 @@ package ForgotPassword;
  * and open the template in the editor.
  */
 
-/**
- *
- * @author awasa
- */
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;

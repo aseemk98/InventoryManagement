@@ -1,0 +1,8 @@
+ProductID,Name,Base Price,Quantity,Cost,
+101,Butter,225.0,10,2250.0,
+
+
+Sgst,56.25
+Cgst,56.25
+CODE,
+Total,2362.5
