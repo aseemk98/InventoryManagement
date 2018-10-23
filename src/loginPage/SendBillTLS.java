@@ -61,7 +61,7 @@ public class SendBillTLS {
                     // adds attachments
                     MimeBodyPart attachPart = new MimeBodyPart();
                     try {
-                        attachPart.attachFile("d:/SDL/InventoryManagement/src/checkout/bill.csv");
+                        attachPart.attachFile("./bill.csv");
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }

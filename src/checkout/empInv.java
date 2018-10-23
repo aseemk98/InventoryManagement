@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package checkout;
-import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
